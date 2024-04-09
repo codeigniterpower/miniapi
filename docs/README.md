@@ -7,12 +7,14 @@ minimo framework para desarrollar php
 favor refierase a la seccion [Desarrollo](#despliegue-y-desarrollo) donde se detalla:
 
 ```
-rm -rf $HOME/Devel/receiptsapi && mkdir $HOME/Devel
+rm -rf $HOME/Devel/miniapi && mkdir $HOME/Devel
 
-git clone --recursive https://codeberg.org/codeigniter/erp-recibosapi $HOME/Devel/receiptsapi
+git clone --recursive https://codeberg.org/codeigniter/miniapi $HOME/Devel/miniapi
 
-cd $HOME/Devel &&  git submodule foreach git checkout develop && git submodule foreach git pull
+cd $HOME/Devel/miniapi && ./server
 ```
+
+Ejecutara un servidor minimo en la raiz del proyecto, visitee entonces http://localhost:8000
 
 ## Despliegue y desarrollo
 
@@ -21,11 +23,11 @@ cd $HOME/Devel &&  git submodule foreach git checkout develop && git submodule f
 * Linux:
   * Debian 7+ o Alpine 3.12+ unicamente
   * git 2.0+
-  * php 7+ o 8+
+  * php 5, 7+ o 8+
 * database (opcional)
-  * mariadb 5.5+
+  * mariadb 5.6+
   * postgresql
-  * sqlite
+  * sqlite 3+
   * ODBC
 
 ## LICENSE
