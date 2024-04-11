@@ -79,9 +79,9 @@
 
         /* Copia de la plantillas*/
         print "Creando el controlador, el modelo, la vista y los archivos asociados.\n";
-        safe_copy("extras/templates/controller.php", "controllers/$module.php");
+        safe_copy("docs/example_controller.php", "controllers/$module.php");
         print "Creando controllers/$module.php.\n";
-        safe_copy("extras/templates/model.php", "models/$module.php");
+        safe_copy("docs/example_model.php", "models/$module.php");
 
 
         /* Seteando el nombre del modulo*/

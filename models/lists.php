@@ -1,11 +1,11 @@
 <?php
 /**!
  * @package   miniapi-webdb
- * @filename  index.php model
- * @route     >index
+ * @filename  lists.php model
+ * @route     >lists
  * @version   1.0
  */
-class index_model extends model {
+class lists_model extends model {
 
   public function notFound() {
     $this->borrow('notFound')->show();
@@ -15,4 +15,5 @@ class index_model extends model {
     $httpcode = 200;
     include(DIR_VIEWS."index.php");
   }
+
 }

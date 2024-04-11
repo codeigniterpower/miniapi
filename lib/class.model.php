@@ -64,5 +64,48 @@ abstract class model {
         }
     }
 
+    /* show api output in json format
+     *
+     * INPUT:  array
+     * OUTPUT: string
+     * ERROR:  null
+     */
+    protected function renderOutput($variables, $jsonout = false) {
 
+        $contentt = 'Content-Type: text/plain';
+        $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+        $httpcode = '412';
+        $sucess = false;
+        $message = 'No message was specified, the server could not process the content or the page does not exist';
+        $page = 1;
+        $pages = 1;
+        $per_page = 1;
+        $data = array($message);
+
+        if(is_array($variables) ) {
+            foreach($variables as $key => $value) {
+                $$key = $value;
+            }
+        }
+
+        $GLOBALS['http_response_code'] = $httpcode;
+        if( !is_null($jsonout) and !empty($jsonout)) {
+            $contentt = 'Content-Type: application/json; charset=utf-8';
+            header($contentt);
+            $jsondata = array(
+                    'sucess' => $sucess,
+                    'message' => $message,
+                    'page' => $page,
+                    'pages' => $pages,
+                    'per_page' => $per_page,
+                    'data'=> $data
+                );
+            print(json_encode($jsondata));
+        }
+        else {
+            $contentt = 'Content-Type: text/html; charset=UTF-8';
+            header($contentt);
+            include(DIR_VIEWS."notfoundview.php");
+        }
+    }
 }

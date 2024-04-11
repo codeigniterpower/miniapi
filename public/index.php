@@ -37,4 +37,10 @@ if (file_exists($file = DIR_CONTROLLERS.$router->module.".php")) {
         unset($_controller);
     }
 }
-
+else
+{
+    $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+    header($protocol . ' 412');
+    $GLOBALS['http_response_code'] = $code;
+    include(DIR_VIEWS."index.php");
+}

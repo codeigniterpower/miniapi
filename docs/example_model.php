@@ -7,21 +7,19 @@
            \____|\__,_|\__,_|\___|_| |_|_|
 Copyright (c) 2014  Díaz  Víctor  aka  (Máster Vitronic)
 Copyright (c) 2018  Díaz  Víctor  aka  (Máster Vitronic)
-<vitronic2@gmail.com>   <mastervitronic@vitronic.com.ve>
 */
-
 class XXX_model extends model {
-
+  private $sql;
+  private $err;
   public function notFound() {
     $this->borrow('notFound')->show();
   }
-
   public function show() {
-    header('Content-Type: application/json; charset=utf-8');
-    print( json_encode([
-      'ok' => true,
-      'msg' => 'Hola Mundo',
-    ]));
+    $this->save();
   }
-
+  public function save() {
+    print 'Hola Mundo!';
+  }
+  private function save_ok() {
+  }
 }

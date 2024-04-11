@@ -4,6 +4,6 @@
 
 class notFound_controller extends controller {
   public function execute() {
-    $this->model->view();
+    $this->model->show();
   }
 }

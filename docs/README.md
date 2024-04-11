@@ -14,21 +14,33 @@ git clone --recursive https://codeberg.org/codeigniter/miniapi $HOME/Devel/minia
 cd $HOME/Devel/miniapi && ./server
 ```
 
-Ejecutara un servidor minimo en la raiz del proyecto, visitee entonces http://localhost:8000
+## How to start a module
 
-## Despliegue y desarrollo
+``` bash
+cd $HOME/Devel/minenux-skindb-webdb
+
+./new_module public newlinktoshow
+```
+
+* `controllers/newlinktoshow.php`
+* `models/newlinktoshow.php`
+* `http://localhost:<port>/newlinktoshow`
+
+## How to Deploy and develop
+
+Start geany an browse the `Devel/minenux-skindb-webdb` directory , look 
+for `skindb-webdb` proyect file, load into Geany!
+
+Then read the [DEVEL.md](DEVEL.md) for some specific details.
 
 #### Requisitos
 
 * Linux:
-  * Debian 7+ o Alpine 3.12+ unicamente
+  * Debian 7+ Alpine 3.12+
   * git 2.0+
-  * php 5, 7+ o 8+
-* database (opcional)
-  * mariadb 5.6+
-  * postgresql
-  * sqlite 3+
-  * ODBC
+  * php 5+ 7+ o 8+
+* database
+  * sqlite3 / perconadb 5.7+
 
 ## LICENSE
 
@@ -37,12 +49,7 @@ Este minicore conteine partes del framework Banshee bajo la misma licencia.
 
 * (c) 2023 Dias Victor @diazvictor
 
-El proyecto receiptsapi es open source y free software bajo la licencia GPLv3 por lo que cualquier modificacion debe ser compartida.
-
-* (c) 2023 PICCORO Lenz MCKAY @mckaygerhard
-* (c) 2023 Dias Victor @diazvictor
-
-Las adiciones y la funcionalidad estan licenciadas tambien **CC-BY-SA-NC** Compartir igual sin derecho comercial a menos que se pida permiso esten de acuerdo ambas partes, y con atribuciones de credito.
+El proyecto minenux-skindb-webdb es open source y free software bajo la licencia **CC-BY-SA-NC** Compartir igual sin derecho comercial a menos que se pida permiso esten de acuerdo ambas partes, y con atribuciones de credito.
 
 * (c) 2023 PICCORO Lenz McKAY <mckaygerhard>
 * (c) 2023 Dias Victor @diazvictor

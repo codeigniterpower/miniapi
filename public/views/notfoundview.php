@@ -50,9 +50,16 @@
         </nav>
         <br>
             <main class="contain">
-            <h1 class="title">Miniapi</h1>
+            <h1 class="title">Not found</h1>
             <hr>
-            Wellcome!
+            <p>
+<?php
+if(!isset($message)) $message = "System is currently in manteniance, just wait for a moment..";
+if(!isset($httpcode)) $httpcode = 412;
+if(!isset($currentrequest)) $currentrequest = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+echo $message.', please report any incident but first try to check if there any previous report at <a href="https://codeberg.org/codeigniter/miniapi/issues">https://codeberg.org/codeigniter/miniapi/issues</a> with code '.$httpcode.' and this link: '.$currentrequest;
+?>
+</p>
             </main>
         <br>
         <footer class="footer">

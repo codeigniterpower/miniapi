@@ -31,10 +31,8 @@ storage/
 /*-shm
 /*-wal
 /guachi.ini
-/modules.ini
 /cache/*
 /public/js/guachi.js
-*.css
 /node_modules/*
 /.sass-cache/*
 /package-lock.json

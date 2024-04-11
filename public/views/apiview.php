@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>miniapi</title>
         <link rel="icon" href="icon.png" type="image/x-icon">
-        <link rel="stylesheet" href="assets/css/bulma.min.css">
+        <link rel="stylesheet" href="../assets/css/bulma.min.css">
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -21,14 +21,14 @@
           <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
               <div class="navbar-item has-dropdown is-hoverable">
-                <a href="lists"  class="navbar-link">
+                <a href="../lists"  class="navbar-link">
                   Start
                 </a>
                 <div class="navbar-dropdown">
-                  <a href="about"  class="navbar-item">
+                  <a href="../about"  class="navbar-item">
                     About
                   </a>
-                  <a href="api/api" class="navbar-item is-selected">
+                  <a href="../api/api" class="navbar-item is-selected">
                     API
                   </a>
                   <hr class="navbar-divider">
@@ -40,7 +40,7 @@
             </div>
             <div class="navbar-end">
               <div class="navbar-item">
-                  <a href="about" class="button is-primary">
+                  <a href="../about" class="button is-primary">
                     About
                   </a>
                 </div>
@@ -50,9 +50,9 @@
         </nav>
         <br>
             <main class="contain">
-            <h1 class="title">Miniapi</h1>
+            <h1 class="title">API reference</h1>
             <hr>
-            Wellcome!
+            API renders!
             </main>
         <br>
         <footer class="footer">

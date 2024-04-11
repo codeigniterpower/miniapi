@@ -1,11 +1,11 @@
 <?php
 /**!
  * @package   miniapi-webdb
- * @filename  index.php controller
- * @route     >index
+ * @filename  api/api.php controller
+ * @route     >api
  * @version   1.0
  */
-class index_controller extends controller {
+class api_api_controller extends controller {
 
   public function execute() {
         $this->model->show();
