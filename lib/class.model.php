@@ -22,6 +22,17 @@ abstract class model {
         $this->view = $view;
     }
 
+    /**
+     * Crea el ID loco de PICCORO posta no es loco.. 
+     * allows touse autoincremnet ODBC compiland and SQL ansi!
+     * con esto identificas varias cosas, fecha, donde cuando 
+     * ah y de paso se ordena solo ya que nunca dara unnumero menor
+     * @return string YYYYMMDDHHmmss
+     */
+    private function mkid() {
+        return date('YmdHis');
+    }
+
     /* Borrow function from other model
      *
      * INPUT:  string module name
