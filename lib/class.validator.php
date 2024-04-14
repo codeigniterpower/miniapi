@@ -34,7 +34,7 @@
 		public function __construct($arrayvars = null) {
 			if(is_array($arrayvars) and count($arrayvars) > 0)
 				$this->arrayvars = $arrayvars;
-			elseif(is_array($_POST) and count($_POST) > 0
+			elseif(is_array($_POST) and count($_POST) > 0)
 				$this->arrayvars = $_POST;
 			else
 				$this->arrayvars = $_GET;
@@ -59,6 +59,20 @@
 			$this->msg = $message;
 		}
 
+		private function _required($name,$rule) {
+			$result = false;
+			if (array_key_exists($name,$this->arrayvars)) {
+				if(trim($this->arrayvars[$name]) != '')
+					$result = true;
+				else
+					$this->add_message("required", $rule);
+			}
+			else
+				$this->add_message("required", $rule);
+			//*/	trigger_error($rule["required"].' rsulta para '.$name.' en '.$result, E_USER_WARNING);
+			return $result;
+		}
+
 		/* Start validation process
 		 *
 		 * INPUT:  array pattern to validate POST data
@@ -69,7 +83,7 @@
 
 			if(is_array($arrayvars) and count($arrayvars) > 0)
 				$this->arrayvars = $arrayvars;
-			elseif(is_array($_POST) and count($_POST) > 0
+			elseif(is_array($_POST) and count($_POST) > 0)
 				$this->arrayvars = $_POST;
 			else
 				$this->arrayvars = $_GET;
@@ -80,12 +94,8 @@
 					$rule["label"] = $name;
 				}
 
-				if ($rule["required"] === true) {
-					if ($this->arrayvars[$name] == "") {
-						$this->add_message("required", $rule);
-						$result = false;
-						continue;
-					}
+				if($rule["required"] == true) {
+					$result = $this->_required($name,$rule);
 				}
 
 				switch ($rule["type"]) {
