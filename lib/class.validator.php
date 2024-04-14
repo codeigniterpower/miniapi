@@ -23,6 +23,7 @@
 			"minlen"    => "La longitud de [label] debe ser al menos [minlen].",
 			"maxlen"    => "La longitud de [label] no debe exceder de [maxlen].."
         );
+        private $arrayvars = null;
 
 		/* Constructor
 		 *
@@ -30,7 +31,13 @@
 		 * OUTPUT: -
 		 * ERROR:  -
 		 */
-		public function __construct() {
+		public function __construct($arrayvars = null) {
+			if(is_array($arrayvars) and count($arrayvars) > 0)
+				$this->arrayvars = $arrayvars;
+			elseif(is_array($_POST) and count($_POST) > 0
+				$this->arrayvars = $_POST;
+			else
+				$this->arrayvars = $_GET;
 		}
 
 		/* Add validation feedback to output
@@ -58,7 +65,14 @@
 		 * OUTPUT: boolean validation oke
 		 * ERROR:  -
 		 */
-		public function execute($pattern) {
+		public function execute($pattern,$arrayvars = null) {
+
+			if(is_array($arrayvars) and count($arrayvars) > 0)
+				$this->arrayvars = $arrayvars;
+			elseif(is_array($_POST) and count($_POST) > 0
+				$this->arrayvars = $_POST;
+			else
+				$this->arrayvars = $_GET;
 			$result = true;
 
 			foreach ($pattern as $name => $rule) {
@@ -67,7 +81,7 @@
 				}
 
 				if ($rule["required"] === true) {
-					if ($_POST[$name] == "") {
+					if ($this->arrayvars[$name] == "") {
 						$this->add_message("required", $rule);
 						$result = false;
 						continue;
@@ -76,41 +90,41 @@
 
 				switch ($rule["type"]) {
 					case "boolean":
-						if (($_POST[$name] != null) && ($_POST[$name] != "On")) {
+						if (($this->arrayvars[$name] != null) && ($this->arrayvars[$name] != "On")) {
 							$this->add_message("boolean", $rule);
 							$result = false;
 						}
 						break;
 					case "email":
-						if ($_POST[$name] != "") {
-							if (valid_email($_POST[$name]) == false) {
+						if ($this->arrayvars[$name] != "") {
+							if (valid_email($this->arrayvars[$name]) == false) {
 								$this->add_message("email", $rule);
 								$result = false;
 							}
 						}
 						break;
 					case "enum":
-						if ($_POST[$name] != "") {
-							if (in_array($_POST[$name], $rule["values"]) == false) {
+						if ($this->arrayvars[$name] != "") {
+							if (in_array($this->arrayvars[$name], $rule["values"]) == false) {
 								$this->add_message("enum", $rule);
 								$result = false;
 							}
 						}
 						break;
 					case "integer":
-						if (valid_input($_POST[$name], VALIDATE_NUMBERS) == false) {
+						if (valid_input($this->arrayvars[$name], VALIDATE_NUMBERS) == false) {
 							$this->add_message("integer", $rule);
 							$result = false;
 						} else {
 							if (isset($rule["min"])) {
-								if ($_POST[$name] < $rule["min"]) {
+								if ($this->arrayvars[$name] < $rule["min"]) {
 									$this->add_message("intmin", $rule);
 									$result = false;
 								}
 							}
 
 							if (isset($rule["max"])) {
-								if ($_POST[$name] > $rule["max"]) {
+								if ($this->arrayvars[$name] > $rule["max"]) {
 									$this->add_message("intmax", $rule);
 									$result = false;
 								}
@@ -118,43 +132,43 @@
 						}
 						break;
 					case "float":
-						if (is_numeric($_POST[$name]) == false) {
+						if (is_numeric($this->arrayvars[$name]) == false) {
 							$this->add_message("float", $rule);
 							$result = false;
 						}
 						break;
 					case "string":
 						if (isset($rule["minlen"])) {
-							if (strlen($_POST[$name]) < $rule["minlen"]) {
+							if (strlen($this->arrayvars[$name]) < $rule["minlen"]) {
 								$this->add_message("minlen", $rule);
 								$result = false;
 							}
 						}
 
 						if (isset($rule["maxlen"])) {
-							if (strlen($_POST[$name]) > $rule["maxlen"]) {
+							if (strlen($this->arrayvars[$name]) > $rule["maxlen"]) {
 								$this->add_message("maxlen", $rule);
 								$result = false;
 							}
 						}
 
 						if (isset($rule["charset"])) {
-							if (valid_input($_POST[$name], $rule["charset"]) == false) {
+							if (valid_input($this->arrayvars[$name], $rule["charset"]) == false) {
 								$this->add_message("charset", $rule);
 								$result = false;
 							}
 						}
 
 						if (isset($rule["pattern"])) {
-							if (preg_match("/".$rule["pattern"]."/", $_POST[$name]) == false) {
+							if (preg_match("/".$rule["pattern"]."/", $this->arrayvars[$name]) == false) {
 								$this->add_message("pattern", $rule);
 								$result = false;
 							}
 						}
 						break;
 					case "timestamp":
-						if ($_POST[$name] != "") {
-							if (valid_timestamp($_POST[$name]) == false) {
+						if ($this->arrayvars[$name] != "") {
+							if (valid_timestamp($this->arrayvars[$name]) == false) {
 								$this->add_message("timestamp", $rule);
 								$result = false;
 							}
