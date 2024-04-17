@@ -206,6 +206,16 @@
         return $str;
     }
 
+    /*
+     * backguard compatibility determine if some variable is countable
+     */
+    if (!function_exists('is_countable')) {
+        function is_countable($var) {
+            trigger_error("Older PHP engine detected using workaround for is_countable", E_USER_WARNING);
+            return (is_array($var) || $var instanceof Countable);
+        }
+    }
+
     /* Localized date string
      *
      * INPUT:  string format[, integer timestamp]

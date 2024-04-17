@@ -2,9 +2,14 @@
 
 minimo framework para desarrollar php
 
-## Como usar este proyecto
+This framework it has a default example api, when you runs the embebed server, 
+you will foun a default api documentation at [DEVEL.md](DEVEL.md) document file.
 
-favor refierase a la seccion [Desarrollo](#despliegue-y-desarrollo) donde se detalla:
+You can change those settings and files on your needs, the default API example 
+only handles a tree case, and retrieve the tree by nodes, there is no authentication, 
+but for auth support please read [DEVEL.md](DEVEL.md) document file.
+
+## Como usar este proyecto
 
 ```
 rm -rf $HOME/Devel/miniapi && mkdir $HOME/Devel
@@ -28,10 +33,7 @@ cd $HOME/Devel/minenux-skindb-webdb
 
 ## How to Deploy and develop
 
-Start geany an browse the `Devel/minenux-skindb-webdb` directory , look 
-for `skindb-webdb` proyect file, load into Geany!
-
-Then read the [DEVEL.md](DEVEL.md) for some specific details.
+Then read at the end of [DEVEL.md](DEVEL.md) for specific details.
 
 #### Requisitos
 
@@ -40,7 +42,11 @@ Then read the [DEVEL.md](DEVEL.md) for some specific details.
   * git 2.0+
   * php 5+ 7+ o 8+
 * database
-  * sqlite3 / perconadb 5.7+
+  * sqlite3 / perconadb 5.5+ / Postgresql 9+ / PDO dbms
+
+## Issues
+
+Use https://codeberg.org/codeigniter/miniapi/issues/new
 
 ## LICENSE
 
