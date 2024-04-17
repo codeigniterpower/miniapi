@@ -8,58 +8,104 @@
 
 class api_v1_lists_model extends model {
 
-    private $errormessage = 'error, invalid arguments or invalid url parameters, data error when retrieve values';
+    private $sql = null;
+
+    private $errormessage = 'error, cannot store values of data, error on parameters or arguments or error in data storage';
     private $urlarguments = null;
-    private $savedatatodb = false;
-    private $savedatafull = false;
-    private $codehttpisok = 404;
+    private $savedatafull = array('nodes_child'=>'-1');
+    private $codehttpisok = 412;
 
     public function notFound() {
         $this->borrow('notFoundApi')->show();
     }
 
-    public function processdata($parameter, $urlarguments) {
+    public function processdata($parameter, $pagenm) {
 
-        //api/vi/lists/<asd>?PAL=UPV&ced1=nnnn&ced2=nnn
+        //api/vi/lists/<ced>
 
-        $varpal = 'NUL,(not received)';
-        $varis0 = array_key_exists('PAL', $urlarguments);
-        if($varis0) $varpal = $urlarguments['PAL'];
-
-        $varcd1 = 'NUL,(not received)';
-        $varis1 = array_key_exists('ced1', $urlarguments);
-        if($varis1) $varcd1 = $urlarguments['ced1'];
-
-        $varcd2 = 'NUL,(not received)';
-        $varis2 = array_key_exists('ced2', $urlarguments);
-        if($varis2) $varcd2 = $urlarguments['ced2'];
-
-        $validator   = new validator($urlarguments);
+        $this->urlarguments = array('nodeid'=>$parameter, 'page'=>$pagenm);
+        $validator   = new validator($this->urlarguments);
         $validations = array(
-            'PAL' => array(
-                'type'      => 'string',
-                "required"  => true
-            ),
-            'ced1' => array(
+            'cedp' => array(
                 'type'      => 'integer',
                 "required"  => true
-            ),
-            'ced2' => array(
-                'type'      => 'integer',
-                "required"  => false
-            ),
-        );
+                ),
+            );
         $check = $validator->execute($validations);
+
         $this->sucess = $check[0];
-        if($this->sucess) 
-            $this->codehttpisok = 200;
-        $this->errormessage = ''.$check[1].' received parameteres are '.$varpal.' '.$varcd1.' '.$varcd2;
+        if(! $this->sucess) {
+            $this->errormessage = $check[1];
+            return false;
+        }
+
+        $this->sucess = $this->_dbdatainit();
+        if(! $this->sucess) {
+            $this->errormessage = $this->errormessage.' please check DB layer structure!';
+            return false;
+        }
+        $this->sucess = $this->_dbdatavars();
+
+        $this->sucess = $this->_dbdatagets();
+        if(! $this->sucess) {
+            $this->errormessage = $this->errormessage.' Data error or no data/database';
+            return false;
+        }
+
+        $this->errormessage = 'Data present, check "data" variable';
+        $this->codehttpisok = 200;
+        $this->sucess = true;
+        return true;
+    }
+
+    private function _dbdatagets() {
+        $results = false;
+        $this->savedatafull = $this->db->execute($this->sql,$this->urlarguments['cedp']);
+        if(is_array($this->savedatafull) and is_array($this->savedatafull[0]))
+            $results = true;
+        return $results;
+    }
+
+    private function _dbdatainit() {
+        $results = -1;
+        $this->errormessage = ' Database structure seems not ready';
+        $this->sql = "SELECT count(nodes_childs) as nodes_childs FROM datatree LIMIT 1";
+        $results = $this->db->execute($this->sql);
+        if(is_array($results) and is_array($results[0])) {
+            $results = $results[0]['nodes_childs'];
+            return true;
+        }
+        return false;
+    }
+
+    private function _dbdatavars() {
+        $this->errormessage = ' Seems there is no data in database or maybe database layer is not ready..';
+        if( array_key_exists('cedp', $this->urlarguments)) {
+            if( trim($this->urlarguments['cedp']) == '') {
+                $this->urlarguments['cedp'] = '-1';
+            }
+        }
+        else
+            $this->urlarguments['cedp'] = '-1';
+        $sql = "
+            SELECT * FROM (
+                    SELECT e1.nodes_childs, e1.nodes_parent, e1.nodes_notes
+                        FROM datatree e1
+                        WHERE e1.nodes_parent = %s
+                    UNION ALL
+                    SELECT e2.nodes_childs, e2.nodes_parent, e2.nodes_notes
+                        FROM datatree e2
+                    JOIN datatree e3 ON e2.nodes_parent = e3.nodes_childs
+                ) nodes WHERE nodes_parent <> 0
+            ";
+        $this->sql = $sql;
     }
 
     public function show($parameters = null) {
       $errormessage = $this->errormessage;
       $httpcode = $this->codehttpisok;
       $sucess = $this->sucess;
+      if($this->sucess) $parameters = $this->savedatafull; else $sucess = 'false';
       $variables = array('sucess'=>$sucess,'message'=>$errormessage,'httpcode'=>$httpcode,'data'=>$parameters);
       $this->renderOutput($variables,true);
     }

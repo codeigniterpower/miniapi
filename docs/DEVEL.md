@@ -1,6 +1,6 @@
 ## miniapi development
 
-Quick setup: [README.md](README.md)
+Quick setup to git clone this repo: [README.md](README.md)
 
 ### WORKFLOW
 
@@ -35,6 +35,17 @@ Our eyecandy framework is based on Bulma https://github.com/jgthms/bulma?tab=rea
 
 ### routing structure and controllers
 
+Any route must have a controller and also a module, both files must be named 
+in same way and routing will have this name. 
+
+There is no view cos its a concept, you can handle view using include routine 
+inside model or controller.
+
+The model is also a concept, but here is represented as class under controller, 
+each controller has (and must has) a model, inside model all the bussiness logic 
+will be code, but controller can handle also those pieces of code.
+
+
 * INDEX for routing: `modules.ini`
 * API calls `controllers/api/v1/<module>.php`
     * `models/api/v1/lists.php`
@@ -45,25 +56,110 @@ Our eyecandy framework is based on Bulma https://github.com/jgthms/bulma?tab=rea
 * VIEWS to include `public/views`
     * `index.php`
 
-### Full API documentation
+## example - an API documentation
 
-Please any format or modification to [API.md](API.md) for all the skin api documentation, before 
-start to develop.
+This repository already has a default mini API, that handles two routes:
+the `list` route to retrieve data from api and `store` route to save data with API.
+
+You can change those settings and files on your needs, the default API example 
+only handles a tree case, and retrieve the tree by nodes, there is no authentication.
+
+#### Authentication
+
+The is no authtentication by default in the example database, any authenticated 
+route must be liste in private section of `modules.ini` filename of the root 
+proyect sources outside of public directory.
+
+You can just emulated the authenticated routes using a conditional in the controllers, 
+that handle an API key that if are not listed will not accept the request or 
+shows only minimal data.
+
+In any case you must use the routing mechanish to manage authenticated routes, 
+if you need more info please fils an issue at https://codeberg.org/codeigniter/miniapi/issues/new
+
+#### api request format
+
+* API CALL TO STORE `/api/v1/store?PAL=<string>&cidh=<string>&cidp=<string>` where:
+    * PAL : a note in thirth column on database
+    * cidh : value of node, could be father or son of other
+    * cidp : value of parent node
+* API CALL TO RETRIEVE `/api/v1/lists?cedp=<string>`
+    * cidp : value of parent node to see all the childs node
+    * if no string all the nodes will be retrieve!
+
+#### api message format
+
+```
+    {
+        "sucess": true,              // boolean : true | false if operation
+        "message": "server message", // string(32) : a message from the server
+        "page": 1,                   // integer : curent page of result, 0 on errors
+        "pages": 1,                  // integer : max number of pages
+        "per_page": 1,               // integer : how many results are per page
+        "data": [                    // array : data of the results
+            {
+                "nodes_notes": String,  // any content of such node
+                "nodes_childs": String, // the id of this node
+                "nodes_parent": String, // if not -1 the parent node on tree
+            }
+        ]
+    }
+```
+
+#### testing code
+
+You can find test routines into the file [test.php](test.php).
 
 ### DATABASE
 
-Se intentara omitir la carga hacia DB, usando los archivos de metadatos de los skins
-y la carga directamente en el git.
+The database must be configured into `guachi.ini` config file, if you will 
+use the Sqlite3 or Sqlite2 DBMS, you must use for best results full path to 
+the files.
 
-Cada skin tendra su propio historico, que lo dara el git, y el usuario lo determina 
-el mismo sistema git.
+The `$db` object its already initialized into the model and controller, and 
+you can access this by `$this->db` routine. Check the module example `list`.
 
-Los skins viejos emplearan la base de datos vieja. los skins nuevos guardaran a data 
-en el git y su id sera el formato nuevo.
+By default the project it uses a default tree database, but if you does not have it 
+it will try to initialize, only if the database file or sheme exists.
 
-##### Diccionario de datos
+##### DAtabase API dictionary
 
-Solo empleado para el api y acceso a la web para la gui [miniapi.sql](miniapi.sql)
+This example alredy assumes this database layer structure: [miniapitree.sql](miniapitree.sql)
+
+![](miniapitree.png)
+
+``` sql
+DROP TABLE IF EXISTS datatree;
+
+CREATE TABLE datatree (
+ nodes_childs VARCHAR(40),
+ nodes_parent VARCHAR(40) Default -1,
+ nodes_notes VARCHAR(40),
+PRIMARY KEY(nodes_childs),
+FOREIGN KEY (nodes_parent) REFERENCES datatree(nodes_childs)
+ON UPDATE CASCADE);
+```
+
+``` sql
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('1', -1, 'padre');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('5', '3', 'otro hijo de hijo');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('6', -1, 'padre');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('2', '1', 'hijo');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('3', '1', 'hijo bajo');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('4', '3', 'hijo bajo');
+INSERT INTO datatree (nodes_childs, nodes_parent, nodes_notes) VALUES ('7', '6', 'hijo deotro');
+```
+
+``` sql
+SELECT e1.nodes_childs, e1.nodes_parent, e1.nodes_notes
+FROM datatree e1
+WHERE e1.nodes_parent = '-1'
+UNION ALL
+SELECT e2.nodes_childs, e2.nodes_parent, e2.nodes_notes
+FROM datatree e2
+JOIN datatree e3 ON e2.nodes_parent = e3.nodes_childs;
+```
+
 
 ### WEBSERVER
 
@@ -126,3 +222,17 @@ server {
 }
 ```
 
+
+## LICENSE
+
+The Guachi Framework is open-source software under the MIT License, this downstream part is a reduced version for!
+Este minicore conteine partes del framework Banshee bajo la misma licencia.
+
+* (c) 2016 Dias Victor aka Master Vitronic
+* (c) 2023 Dias Victor @diazvictor
+
+El proyecto minenux-skindb-webdb es open source y free software bajo la licencia **CC-BY-SA-NC** Compartir igual sin derecho comercial a menos que se pida permiso esten de acuerdo ambas partes, y con atribuciones de credito.
+
+* (c) 2023 PICCORO Lenz McKAY <mckaygerhard>
+* (c) 2023 Dias Victor @diazvictor
+* (c) 2023 Lucero Tyron

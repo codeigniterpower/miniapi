@@ -1,8 +1,19 @@
 # php micro framework
 
-## Introduccion
+Great PHP5 / PHP7 / PHP8 micro framework for API's with minimal interface!
 
-for development read [docs/README.md](docs/README.md)**
+## Introduction
+
+A great php micro framework with database support ideal to make great API's
+and also web interfaces. It embebed the Bulma css framework for defaults!
+
+## HOW TO
+
+Please refers to [docs/README.md](docs/README.md) for instalation and development!
+
+## Support
+
+https://codeberg.org/codeigniter/miniapi/issues
 
 ## LICENSE
 

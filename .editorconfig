@@ -15,7 +15,7 @@ max_line_length = off
 indent_size = false
 
 [*.ini]
-indent_size = 4
+indent_size = 0
 
 [*.sql]
 indent_size = 4

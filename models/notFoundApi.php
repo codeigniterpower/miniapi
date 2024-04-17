@@ -1,7 +1,7 @@
 <?php
 /**!
  * @package   skindb-webdb
- * @filename  notFound_model.php controller
+ * @filename  notFoundApi_model.php controller
  * @route     >api>notfound
  * @version   1.0
  */

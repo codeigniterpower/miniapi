@@ -41,6 +41,6 @@ else
 {
     $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
     header($protocol . ' 412');
-    $GLOBALS['http_response_code'] = $code;
+    $GLOBALS['http_response_code'] = 412;
     include(DIR_VIEWS."index.php");
 }

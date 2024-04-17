@@ -1,3 +1,6 @@
+# no shit allowed
+.vscode
+
 # ---> Laravel
 /vendor/
 node_modules/
@@ -17,7 +20,6 @@ public_html/storage
 public_html/hot
 
 storage/*.key
-.env
 Homestead.yaml
 Homestead.json
 /.vagrant
@@ -36,7 +38,6 @@ storage/
 /node_modules/*
 /.sass-cache/*
 /package-lock.json
-/server
 /extras/pruebas/
 /public/pruebas.php
 /test/
